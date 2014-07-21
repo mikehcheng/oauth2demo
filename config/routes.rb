@@ -1,7 +1,15 @@
 Rails.application.routes.draw do
   root 'oauth#index'
+  get 'index', to: 'oauth#index'
 
   resources :users
+  scope 'auth/saml' do
+    get 'login', to: 'saml#init', as: :saml_login
+    post 'callback', to: 'saml#consume', as: :saml_callback
+    get 'metadata', to: 'saml#metadata', as: :saml_metadata
+  end
+
+  
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
