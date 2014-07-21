@@ -5,12 +5,20 @@ class OauthController < ApplicationController
     logger.info 'INDEX'
   end
 
-  private
-    def authenticate
-      @user = User.find(1)
-    end
+  def token
 
+  end
+
+  def verify
+
+  end
+
+  private
     def saml_authenticate
       redirect_to saml_login_url
+    end
+
+    def create_token
+      SecureRandom.uuid
     end
 end

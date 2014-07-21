@@ -10,6 +10,7 @@ class SamlController < ApplicationController
   end
 
   #depending on mobile implementation, this method may do nothing
+  #not sure whether the callback will be to the application
   def consume
     response          = OneLogin::RubySaml::Response.new(params[:SAMLResponse])
     response.settings = saml_settings
@@ -20,8 +21,8 @@ class SamlController < ApplicationController
       @user = User.find_by_username(response.name_id) || User.new({:username => response.name_id, :password => "Aspera123_"})
       @user.save!
       logger.info 'success'
-      render 'oauth/index'
-      # redirect_to '/index' #use when tokens are implemented
+      render main_index_path
+      # redirect_to main_index_path
     else
       logger.info 'failure'
       raise ActionController::RoutingError.new('Invalid SAML Response')

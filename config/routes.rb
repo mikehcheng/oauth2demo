@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   root 'oauth#index'
-  get 'index', to: 'oauth#index'
+
 
   resources :users
   scope 'auth/saml' do
@@ -9,7 +9,11 @@ Rails.application.routes.draw do
     get 'metadata', to: 'saml#metadata', as: :saml_metadata
   end
 
-  
+  scope 'oauth' do 
+    get 'index', to: 'oauth#index', as: :main_index
+    get 'token', to: 'oauth#token', as: :token_request
+    get 'verify', to: 'oauth#verify', as: :token_verification
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

@@ -40,5 +40,3 @@ gem 'spring',        group: :development
 
 gem 'ruby-saml'
 gem 'rest-client'
-gem 'oauth2'
-
