@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
-  root 'oauth#index'
-
+  root 'api#index'
 
   resources :users
   scope 'auth/saml' do
@@ -10,9 +9,12 @@ Rails.application.routes.draw do
   end
 
   scope 'oauth' do 
-    get 'index', to: 'oauth#index', as: :main_index
     get 'token', to: 'oauth#token', as: :token_request
     get 'verify', to: 'oauth#verify', as: :token_verification
+  end
+
+  scope 'api' do
+    get 'index', to: 'api#index', as: :main_index
   end
 
   # The priority is based upon order of creation: first created -> highest priority.

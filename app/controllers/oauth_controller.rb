@@ -1,23 +1,25 @@
 class OauthController < ApplicationController
-  before_action :saml_authenticate, only: [:index]
-
-  def index
-    logger.info 'INDEX'
-  end
-
   def token
+    raise "Incorrect grant type." if params[:grant_type] != 'assertion'
 
+    response = OneLogin::RubySaml::Response.new(params[:assertion])
+    response.settings = saml_settings
+    if response.isValid?
+      #generate token
+    else
+      #redirect_to error_page
+    end
   end
 
   def verify
-
+    if #token_exists
+      #post back attributes
+    else
+      #redirect_to different_error_page/flash error
+    end
   end
 
   private
-    def saml_authenticate
-      redirect_to saml_login_url
-    end
-
     def create_token
       SecureRandom.uuid
     end
