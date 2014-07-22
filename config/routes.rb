@@ -8,7 +8,7 @@ Rails.application.routes.draw do
     get 'metadata', to: 'saml#metadata', as: :saml_metadata
   end
 
-  scope 'oauth' do 
+  scope 'oauth2' do 
     get 'token', to: 'oauth#token', as: :token_request
     get 'verify', to: 'oauth#verify', as: :token_verification
   end

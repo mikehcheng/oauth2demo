@@ -2,10 +2,16 @@ class OauthController < ApplicationController
   def token
     raise "Incorrect grant type." if params[:grant_type] != 'assertion'
 
-    response = OneLogin::RubySaml::Response.new(params[:assertion])
-    response.settings = saml_settings
-    if response.isValid?
-      #generate token
+    saml_response = OneLogin::RubySaml::Response.new(params[:assertion])
+    saml_response.settings = saml_settings
+    if saml_response.isValid?
+      token = OauthToken.new(:access_token => create_token,
+                             :refresh_token => create_token,
+                             :user_attributes => saml_response.attributes.to_json)
+      token.save!
+      logger.info "token: valid saml, token saved"
+
+      render 
     else
       #redirect_to error_page
     end
@@ -21,6 +27,6 @@ class OauthController < ApplicationController
 
   private
     def create_token
-      SecureRandom.uuid
+      SecureRandom.urlsafe_base64(16)
     end
 end

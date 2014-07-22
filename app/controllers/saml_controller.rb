@@ -16,11 +16,11 @@ class SamlController < ApplicationController
     if response.is_valid?
       @user = User.find_by_username(response.name_id) || User.new({:username => response.name_id, :password => "Aspera123_"})
       @user.save!
-      logger.info 'success'
+      logger.info 'consume: valid saml'
       render main_index_path
       # redirect_to main_index_path
     else
-      logger.info 'failure'
+      logger.info 'consume: invalid saml'
       raise ActionController::RoutingError.new('Invalid SAML Response')
     end
   end
