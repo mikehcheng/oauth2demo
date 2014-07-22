@@ -21,7 +21,7 @@ class SamlController < ApplicationController
       # redirect_to main_index_path
     else
       logger.info 'consume: invalid saml'
-      raise ActionController::RoutingError.new('Invalid SAML Response')
+      raise 'Invalid SAML Response'
     end
   end
 

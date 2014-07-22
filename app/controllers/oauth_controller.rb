@@ -1,4 +1,6 @@
 class OauthController < ApplicationController
+  EXPIRATION_WINDOW = 1.day
+
   def token
     raise "Incorrect grant type." if params[:grant_type] != 'assertion'
 
@@ -8,12 +10,15 @@ class OauthController < ApplicationController
       token = OauthToken.new(:access_token => create_token,
                              :refresh_token => create_token,
                              :user_attributes => saml_response.attributes.to_json)
-      token.save!
+      token.save
       logger.info "token: valid saml, token saved"
-
-      render 
+      render json: {:access_token  => token.access_token,
+                    :token_type    => "bearer"
+                    :refresh_token => token.refresh_token,
+                    :expires_in    => EXPIRATION_WINDOW}
     else
-      #redirect_to error_page
+      logger.info "token: invalid saml, no token generated"
+      raise 'Unable to generate tokens.'
     end
   end
 
