@@ -9,8 +9,8 @@ Rails.application.routes.draw do
   end
 
   scope 'oauth2' do 
-    get 'token', to: 'oauth#token', as: :token_request
-    get 'verify', to: 'oauth#verify', as: :token_verification
+    post 'token', to: 'oauth#token', as: :token_request
+    post 'verify', to: 'oauth#verify', as: :token_verification
   end
 
   scope 'api' do

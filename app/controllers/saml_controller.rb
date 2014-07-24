@@ -20,6 +20,7 @@ class SamlController < ApplicationController
       render main_index_path
       # redirect_to main_index_path
     else
+      #invalid saml error
       logger.info 'consume: invalid saml'
       raise 'Invalid SAML Response'
     end

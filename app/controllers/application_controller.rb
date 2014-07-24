@@ -2,6 +2,7 @@ class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
+  force_ssl if Rails.env.production?
 
   NAME_IDENTIFIER_FORMAT_UNSPECIFIED = "urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
   SAML_IDP_SSO_TARGET_URL = "https://10.0.201.188:9031/idp/SSO.saml2"

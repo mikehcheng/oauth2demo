@@ -91,16 +91,20 @@ GEM
     rest-client (1.7.2)
       mime-types (>= 1.16, < 3.0)
       netrc (~> 0.7)
-    rspec (3.0.0)
-      rspec-core (~> 3.0.0)
-      rspec-expectations (~> 3.0.0)
-      rspec-mocks (~> 3.0.0)
     rspec-core (3.0.3)
       rspec-support (~> 3.0.0)
     rspec-expectations (3.0.3)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.0.0)
     rspec-mocks (3.0.3)
+      rspec-support (~> 3.0.0)
+    rspec-rails (3.0.2)
+      actionpack (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-core (~> 3.0.0)
+      rspec-expectations (~> 3.0.0)
+      rspec-mocks (~> 3.0.0)
       rspec-support (~> 3.0.0)
     rspec-support (3.0.3)
     ruby-saml (0.8.1)
@@ -155,7 +159,7 @@ DEPENDENCIES
   jquery-rails
   rails (= 4.1.4)
   rest-client
-  rspec
+  rspec-rails
   ruby-saml
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
