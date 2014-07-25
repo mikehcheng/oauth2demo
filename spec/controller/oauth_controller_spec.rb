@@ -16,8 +16,45 @@ RSpec.describe OauthController, :type => :controller do
       expected_response = {:access_token  => token.access_token,
                            :token_type    => :bearer,
                            :refresh_token => token.refresh_token,
-                           :expires_in    => config.token_expiration_time}.to_json
+                           :expires_in    => Rails.application.config.token_expiration_window}.to_json
       expect(response.body).to eql(expected_response)
+    end
+
+    it "will not generate a token for invalid SAML assertions" do
+      Timecop.freeze(@assertion_time + 1.month)
+      post :token, grant_type: 'assertion', assertion: @assertion
+      token = OauthToken.first
+      expect(token).to be_nil
+      expect(JSON.parse(response.body)["error"]).to eql("invalid_grant")
+    end
+
+    it "will generate a token given a valid refresh token" do
+      token = FactoryGirl.create(:token)
+      post :token, grant_type: 'refresh_token', refresh_token: token.refresh_token
+      new_token_attr = JSON.parse(response.body)
+      new_token = OauthToken.where("access_token = ? AND refresh_token = ?",
+                    new_token_attr["access_token"], new_token_attr["refresh_token"])
+      expect(new_token).to exist
+    end
+
+    it "will not generate a token for an invalid refresh token" do
+      FactoryGirl.create(:token)
+      random_token = SecureRandom.urlsafe_base64(16)
+      post :token, grant_type: 'refresh_token', refresh_token: random_token
+      expect(JSON.parse(response.body)["error"]).to eql("invalid_grant")
+    end
+
+    it "will not generate a token for unsupported grant types" do
+      post :token, grant_type: "gqbweipgfisopdfjiaweorh"
+      expect(JSON.parse(response.body)["error"]).to eql("unsupported_grant_type")
+    end
+  end
+
+  describe "POST #verify" do
+    it "will provide information for a user given the associated token" do
+      token = FactoryGirl.create(:token)
+      post :verify, token: token.access_token
+      expect(response.body).to eql(token.user_attributes)
     end
   end
 end

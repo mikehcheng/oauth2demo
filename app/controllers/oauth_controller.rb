@@ -14,7 +14,7 @@ class OauthController < ApplicationController
         render json: {:access_token  => token.access_token,
                       :token_type    => :bearer,
                       :refresh_token => token.refresh_token,
-                      :expires_in    => config.token_expiration_time}
+                      :expires_in    => Rails.application.config.token_expiration_window}
       else
         #invalid saml, save should always be ok
         logger.info "token: invalid saml, no token generated"
@@ -22,14 +22,14 @@ class OauthController < ApplicationController
                       :error_description => "Invalid SAML assertion"}
       end
     when 'refresh_token'
-      if token = OauthToken.find_by_refresh_token(param['refresh_token'])
+      if token = OauthToken.find_by_refresh_token(params['refresh_token'])
         token.access_token = generate_token_string
         token.save
         logger.info "token: valid refresh token, token saved"
         render json: {:access_token  => token.access_token,
                       :token_type    => :bearer,
                       :refresh_token => token.refresh_token,
-                      :expires_in    => config.token_expiration_time}
+                      :expires_in    => Rails.application.config.token_expiration_window}
       else
         #invalid refresh token
         logger.info "token: unable to find refresh token"
