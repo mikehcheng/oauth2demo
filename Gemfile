@@ -39,7 +39,9 @@ gem 'spring',        group: :development
 # gem 'debugger', group: [:development, :test]
 
 gem 'rspec-rails'
+gem 'factory_girl_rails'
 gem 'capybara'
+gem 'timecop'
 
 gem 'ruby-saml'
 gem 'rest-client'
