@@ -2,7 +2,7 @@ class OauthController < ApplicationController
   def token
     expires_now
     case params[:grant_type]
-    when 'assertion'
+    when "urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Asaml2-bearer&assertion"
       saml_response = OneLogin::RubySaml::Response.new(params[:assertion])
       saml_response.settings = saml_settings
       if saml_response.is_valid?
