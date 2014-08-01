@@ -10,7 +10,7 @@ RSpec.describe OauthController, :type => :controller do
 
   describe "POST #token" do
     it "will generate a token given a valid SAML assertion" do
-      post :token, grant_type: 'assertion', assertion: @assertion
+      post :token, grant_type: 'urn:ietf:params:oauth:grant-type:saml2-bearer', assertion: @assertion
       token = OauthToken.first
       expect(token).to_not be_nil
       expected_response = {:access_token  => token.access_token,
@@ -22,7 +22,7 @@ RSpec.describe OauthController, :type => :controller do
 
     it "will not generate a token for invalid SAML assertions" do
       Timecop.freeze(@assertion_time + 1.month)
-      post :token, grant_type: 'assertion', assertion: @assertion
+      post :token, grant_type: 'urn:ietf:params:oauth:grant-type:saml2-bearer', assertion: @assertion
       token = OauthToken.first
       expect(token).to be_nil
       expect(JSON.parse(response.body)["error"]).to eql("invalid_grant")

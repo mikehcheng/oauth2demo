@@ -2,7 +2,7 @@ class OauthController < ApplicationController
   def token
     expires_now
     case params[:grant_type]
-    when "urn%3Aietf%3Aparams%3Aoauth%3Agrant-type%3Asaml2-bearer&assertion"
+    when "urn:ietf:params:oauth:grant-type:saml2-bearer"
       saml_response = OneLogin::RubySaml::Response.new(params[:assertion])
       saml_response.settings = saml_settings
       if saml_response.is_valid?
@@ -44,7 +44,7 @@ class OauthController < ApplicationController
 
   def verify
     expires_now
-    if token = OauthToken.find_by_access_token(params[:token])
+    if token = OauthToken.find_by_access_token(params[:token]) 
       logger.info "verify: access token is good"
       render json: token.user_attributes
     else
